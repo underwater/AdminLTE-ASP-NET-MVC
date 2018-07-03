@@ -25,8 +25,20 @@
         </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
+
+
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
+
+            <li class="@Html.IsSelected(controller: "AdrContribution")">
+                <a href="@Url.Action("Index", "AdrContribution")">
+                    <i class="fa fa-th"></i> <span>ADR Contribution</span>
+                    <span class="pull-right-container">
+                        <small class="label pull-right bg-green">new</small>
+                    </span>
+                </a>
+            </li>
+
             <li class="@Html.IsSelected(controller: "Dashboard") treeview">
                 <a href="@Url.Action("Dashboardv1", "Dashboard")">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -39,6 +51,7 @@
                     <li class="@Html.IsSelected(action: "Dashboardv2")"><a href="@Url.Action("Dashboardv2", "Dashboard")"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
                 </ul>
             </li>
+
             <li class="@Html.IsSelected(controller: "Layout") treeview">
                 <a href="@Url.Action("Fixed", "Layout")">
                     <i class="fa fa-files-o"></i>
@@ -54,6 +67,7 @@
                     <li class="@Html.IsSelected(action: "CollapsedSidebar")"><a href="@Url.Action("CollapsedSidebar", "Layout")"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
                 </ul>
             </li>
+
             <li class="@Html.IsSelected(controller: "Widgets")">
                 <a href="@Url.Action("Index", "Widgets")">
                     <i class="fa fa-th"></i> <span>Widgets</span>
