@@ -16,7 +16,7 @@ namespace adminlte
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Dashboard", action = "Dashboardv1", id = UrlParameter.Optional }
+                defaults: new { controller = "AdrContribution", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

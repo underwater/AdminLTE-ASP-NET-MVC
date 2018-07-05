@@ -1,4 +1,6 @@
-﻿using AdrData.Repositories;
+﻿using AdrBusiness.Model;
+using AdrData.Entities;
+using AdrData.Repositories;
 using MoreLinq;
 using System;
 using System.Collections.Generic;
@@ -9,18 +11,18 @@ using System.Threading.Tasks;
 namespace AdrBusiness.Services
 {
 
-    public class FakePosService 
+    public class FakeParameterService 
     {
-        private readonly FakePosRepository repository;
+        private readonly FakePosRepository posRepository;
 
-        public FakePosService()
+        public FakeParameterService()
         {
-            repository = new FakePosRepository();
+            posRepository = new FakePosRepository();
         }
 
         public IEnumerable<string> GetAllSuperRegions()
         {
-            var result = repository.GetAllPosMappings()
+            var result = posRepository.GetAllPosMappings()
                 .Select(x => x.SuperRegion)
                 .Distinct();
 
@@ -29,12 +31,13 @@ namespace AdrBusiness.Services
 
         public IEnumerable<string> GetPosGroupsBySuperRegion(string superRegion)
         {
-            var result = repository.GetAllPosMappings()
+            var result = posRepository.GetAllPosMappings()
                 .Where(x => x.SuperRegion == superRegion)
                 .Select(x => x.PosGroup)
                 .Distinct();
 
             return result;
         }
+  
     }
 }

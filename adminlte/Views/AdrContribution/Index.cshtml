@@ -1,4 +1,5 @@
-﻿
+﻿@model adminlte.ViewModels.AdrContributionViewModel
+
 @{
     ViewBag.Title = "ADR Contributions";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,6 +15,9 @@
         </h1>
     </section>
 
+    @*Add cascading drop down*@
+    @*https://www.pluralsight.com/guides/asp-net-mvc-populating-dropdown-lists-in-razor-views-using-the-mvvm-design-pattern-entity-framework-and-ajax?gclid=CjwKCAjw4PHZBRA-EiwAAas4Zk3VfOWiOVG0kc3AQtvv7YzP07x80chueh8skvugi603Fun3aAhYPxoCVcIQAvD_BwE&aid=7010a000002BWqGAAW&promo=&oid=&utm_source=non_branded&utm_medium=digital_paid_search_google&utm_campaign=EMEA_Dynamic&utm_content=&s_kwcid=AL!5668!3!277727473412!b!!g!!&ef_id=WCM1hwAABMKWGSH8:20180704081108:s*@
+
     <!-- Parameters -->
     <section class="content">
         <div class="box box-default">
@@ -25,31 +29,45 @@
             <div class="box-body">
                 <div class="row">
 
-                    <!-- Super Region -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Super Region</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option>EMEA</option>
-                                <option>APAC</option>
-                            </select>
+                    @using (Html.BeginForm("Index", "AdrContribution", FormMethod.Post, new { @id = "superRegionForm" }))
+                    {
+                        <!-- Super Region -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Super Region</label>
+                                <select class="form-control select2" style="width: 100%;" name="superRegion" id="superRegion">
+                                    @foreach (var superRegion in Model.SuperRegions)
+                                    {
+                                        <option>@superRegion</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
-                    </div>
-
+                    }
+                    @using (Html.BeginForm())
+                    {
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>POS Group</label>
+                                <select class="form-control select2" style="width: 100%;">
+                                    @if (Model.PosGroups != null && Model.PosGroups.Any())
+                                    {
+                                        foreach (var posGroup in Model.PosGroups)
+                                        {
+                                            <option>@posGroup</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    }
                     <!-- Pos Group -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>POS Group</label>
-                            <select class="form-control select2" style="width: 100%;">
-                                <option>Pos Group #1</option>
-                                <option>Pos Group #2</option>
-                            </select>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
     </section>
+
 
 
     <section class="content">
@@ -67,82 +85,23 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Rendering engine</th>
-                                    <th>Browser</th>
-                                    <th>Platform(s)</th>
-                                    <th>Engine version</th>
-                                    <th>CSS grade</th>
+                                    <th>Month</th>
+                                    <th>ADR</th>
+                                    <th>Adjustment</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 4.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td> 4</td>
-                                    <td>X</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 5.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td>5</td>
-                                    <td>C</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 5.5
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td>5.5</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 6
-                                    </td>
-                                    <td>Win 98+</td>
-                                    <td>6</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 7</td>
-                                    <td>Win XP SP2+</td>
-                                    <td>7</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>AOL browser (AOL desktop)</td>
-                                    <td>Win XP</td>
-                                    <td>6</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Gecko</td>
-                                    <td>Firefox 1.0</td>
-                                    <td>Win 98+ / OSX.2+</td>
-                                    <td>1.7</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Gecko</td>
-                                    <td>Firefox 1.5</td>
-                                    <td>Win 98+ / OSX.2+</td>
-                                    <td>1.8</td>
-                                    <td>A</td>
-                                </tr>
+                                @if (Model != null && Model.StandaloneResults != null)
+                                {
+                                    foreach (var standalone in Model?.StandaloneResults)
+                                    {
+                                        <tr>
+                                            <td>@standalone.Month</td>
+                                            <td>@standalone.Adr</td>
+                                            <td>@standalone.Adjustment</td>
+                                        </tr>
+                                    }
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -223,5 +182,19 @@
         </div>
     </section>
 </div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#superRegion').on('change', function () {
+                $("#superRegionForm").submit();
+            })
+        })
+    </script>
+}
+
+
+
 
 
