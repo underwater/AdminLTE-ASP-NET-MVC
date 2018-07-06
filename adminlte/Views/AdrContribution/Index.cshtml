@@ -44,12 +44,12 @@
                             </div>
                         </div>
                     }
-                    @using (Html.BeginForm())
+                    @using (Html.BeginForm("LoadPosGroup", "AdrContribution", FormMethod.Post, new { @id = "selectedPosGroupForm" }))
                     {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>POS Group</label>
-                                <select class="form-control select2" style="width: 100%;">
+                                <select class="form-control select2" style="width: 100%;" name="selectedPosGroup" id="selectedPosGroup">
                                     @if (Model.PosGroups != null && Model.PosGroups.Any())
                                     {
                                         foreach (var posGroup in Model.PosGroups)
@@ -91,7 +91,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (Model != null && Model.StandaloneResults != null)
+                                @if (Model?.StandaloneResults != null)
                                 {
                                     foreach (var standalone in Model?.StandaloneResults)
                                     {
@@ -189,7 +189,11 @@
         $(document).ready(function () {
             $('#superRegion').on('change', function () {
                 $("#superRegionForm").submit();
-            })
+            });
+
+            $("#selectedPosGroup").on("change", function () {
+                $("#selectedPosGroupForm").submit();
+            });
         })
     </script>
 }
