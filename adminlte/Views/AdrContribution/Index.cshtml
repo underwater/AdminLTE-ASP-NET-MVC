@@ -29,40 +29,52 @@
             <div class="box-body">
                 <div class="row">
 
-                    @using (Html.BeginForm("Index", "AdrContribution", FormMethod.Post, new { @id = "superRegionForm" }))
+                    @using (Html.BeginForm("Index", "AdrContribution", FormMethod.Post, new { @id = "regionsForm" }))
                     {
                         <!-- Super Region -->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Super Region</label>
-                                <select class="form-control select2" style="width: 100%;" name="superRegion" id="superRegion">
-                                    @foreach (var superRegion in Model.SuperRegions)
+
+                                @Html.DropDownListFor(x => x.SelectedSuperRegion,
+                                    Model.SuperRegions.Select(region => new SelectListItem { Text = region, Value = region}),
+                                    "Select super region",
+                                    new Dictionary<string, object>
                                     {
-                                        <option>@superRegion</option>
-                                    }
-                                </select>
+                                        { "name" , "superRegion" },
+                                        {  "id" ,"superRegion" },
+                                        { "class" , "form-control select2" }
+                                    })
+
+                                <!--This hidden element in order keep items after post it is usual way to to keep items in mvc -->
+                                <div style="display: none;">@Html.EditorFor(model => model.SuperRegions)</div>
                             </div>
                         </div>
-                    }
-                    @using (Html.BeginForm("LoadPosGroup", "AdrContribution", FormMethod.Post, new { @id = "selectedPosGroupForm" }))
-                    {
+
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>POS Group</label>
-                                <select class="form-control select2" style="width: 100%;" name="selectedPosGroup" id="selectedPosGroup">
-                                    @if (Model.PosGroups != null && Model.PosGroups.Any())
-                                    {
-                                        foreach (var posGroup in Model.PosGroups)
+                                @if (Model.PosGroups != null && Model.PosGroups.Any())
+                                {
+                                    @Html.DropDownListFor(x => x.SelectedPosGroup,
+                                        Model.PosGroups.Select(posGroup => new SelectListItem { Text = posGroup, Value = posGroup}),
+                                        "Select pos group",
+                                        new  Dictionary<string, object>
                                         {
-                                            <option>@posGroup</option>
-                                        }
-                                    }
-                                </select>
+                                            { "name" , "selectedPosGroup" },
+                                            { "id" , "selectedPosGroup" },
+                                            { "class" , "form-control select2" }
+                                        })
+
+                                    <!--This hidden element in order keep items after post it is usual way to to keep items in mvc -->
+                                    <div style="display: none;">@Html.EditorFor(model => model.PosGroups)</div>
+                                }
+                               
                             </div>
                         </div>
                     }
                     <!-- Pos Group -->
-
                 </div>
             </div>
         </div>
@@ -127,53 +139,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 4.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td> 4</td>
-                                    <td>X</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 5.0
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td>5</td>
-                                    <td>C</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 5.5
-                                    </td>
-                                    <td>Win 95+</td>
-                                    <td>5.5</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>
-                                        Internet
-                                        Explorer 6
-                                    </td>
-                                    <td>Win 98+</td>
-                                    <td>6</td>
-                                    <td>A</td>
-                                </tr>
-                                <tr>
-                                    <td>Trident</td>
-                                    <td>Internet Explorer 7</td>
-                                    <td>Win XP SP2+</td>
-                                    <td>7</td>
-                                    <td>A</td>
-                                </tr>
+                                @*table body here*@
                             </tbody>
                         </table>
                     </div>
@@ -187,12 +153,26 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
+
             $('#superRegion').on('change', function () {
-                $("#superRegionForm").submit();
+                var regionsForm = $("#regionsForm");
+                var submitType = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "submitType").val("@Constants.LoadPosGroups");
+
+                regionsForm.append(submitType);
+                regionsForm.submit();
             });
 
             $("#selectedPosGroup").on("change", function () {
-                $("#selectedPosGroupForm").submit();
+
+                var regionsForm = $("#regionsForm");
+                var submitType = $("<input>")
+                    .attr("type", "hidden")
+                    .attr("name", "submitType").val("@Constants.LoadResults");
+
+                regionsForm.append(submitType);
+                regionsForm.submit();
             });
         })
     </script>

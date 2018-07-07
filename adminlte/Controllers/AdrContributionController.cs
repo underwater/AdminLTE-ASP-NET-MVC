@@ -30,39 +30,24 @@ namespace adminlte.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(string superRegion)
+        public ActionResult Index(AdrContributionViewModel viewModel, string submitType)
         {
-            var superRegions = parameterService.GetAllSuperRegions();
-            var posGroup = parameterService.GetPosGroupsBySuperRegion(superRegion);
+	        if (submitType == Constants.LoadPosGroups)
+	        {
+		        var posGroups = parameterService.GetPosGroupsBySuperRegion(viewModel.SelectedSuperRegion);
+		        viewModel.PosGroups = posGroups;
+	        }
 
-            var vm = new AdrContributionViewModel
-            {
-                SuperRegions = superRegions,
-                PosGroups = posGroup
-            };
+	        if (submitType == Constants.LoadResults)
+	        {
+		        var standaloneResults = resultService.GetStandaloneResults(viewModel.SelectedPosGroup);
+		        var packageResults = resultService.GetPackageResults(viewModel.SelectedPosGroup);
 
-            return View(vm);
-        }
+		        viewModel.StandaloneResults = standaloneResults;
+		        viewModel.PackageResults = packageResults;
+	        }
 
-        [HttpPost]
-        public ActionResult LoadPosGroup(string selectedPosGroup)
-        {
-            var superRegions = parameterService.GetAllSuperRegions();
-            var posGroups = parameterService.GetPosGroupsBySuperRegion(selectedPosGroup);
-            var standaloneResults = resultService.GetStandaloneResults(selectedPosGroup);
-            var packageResults = resultService.GetPackageResults(selectedPosGroup);
-
-
-            var vm = new AdrContributionViewModel
-            {
-                SuperRegions = superRegions,
-                PosGroups = posGroups,
-                StandaloneResults = standaloneResults,
-                PackageResults = packageResults
-                
-            };
-
-            return View("Index", vm);
+			return View(viewModel);
         }
     }
 }
